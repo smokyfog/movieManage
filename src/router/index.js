@@ -54,7 +54,18 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
-
+  {
+    path: '/moviemagager',
+    component: Layout,
+    children: [
+      {
+        path: 'moviemagager',
+        name: 'MovieMagager',
+        component: () => import('@/views/table/movieMagager'),
+        meta: { title: '影片管理', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/example',
     component: Layout,
@@ -89,7 +100,18 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/setmovie',
+    component: Layout,
+    children: [
+      {
+        path: 'setmovie',
+        name: 'SetMovie',
+        component: () => import('@/views/form/setMovie'),
+        meta: { title: '添加影片', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/nested',
     component: Layout,
