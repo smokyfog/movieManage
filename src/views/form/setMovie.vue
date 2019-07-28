@@ -9,8 +9,8 @@
           <el-form-item label="影片">
             <el-upload
               class="upload-poster avatar-uploader"
-              :action="this.basehost+'/admin/movie/putMovie'"
-              :data= "{'path':form.path}"
+              :action="basehost+'/admin/movie/putMovie'"
+              :data="{'path':form.path}"
               :on-preview="handlePreview"
               :on-success="movieSuccess"
               :show-file-list="false"
@@ -25,8 +25,8 @@
           <el-form-item label="影片封面:">
             <el-upload
               class="upload-poster avatar-uploader"
-              :action="this.basehost+'/admin/movie/putMovie'"
-              :data= "{'path':form.path}"
+              :action="basehost+'/admin/movie/putMovie'"
+              :data="{'path':form.path}"
               :on-preview="handlePreview"
               :on-success="coverSuccess"
               :show-file-list="false"
@@ -41,8 +41,8 @@
           <el-form-item label="影片海报">
             <el-upload
               class="upload-poster avatar-uploader"
-              :action="this.basehost+'/admin/movie/putMovie'"
-              :data= "{'path':form.path}"
+              :action="basehost+'/admin/movie/putMovie'"
+              :data="{'path':form.path}"
               :on-preview="handlePreview"
               :on-success="posterSuccess"
               :show-file-list="false"
@@ -58,9 +58,10 @@
         <el-col :span="24">
           <el-form-item label="影片剧照">
             <el-upload
-              :action="this.basehost+'/admin/movie/putMovie'"
-              :data= "{'path':form.path}"
+              :action="basehost+'/admin/movie/putMovie'"
+              :data="{'path':form.path}"
               list-type="picture-card"
+              :on-success="plotPicsSuccess"
               :on-remove="plotPicsRemove"
             >
               <i class="el-icon-plus" />
@@ -116,10 +117,7 @@ export default {
         releaseDate: '上映时间：2019-08-02(美国)',
         totalTime: '影片时长：未知',
         plotDesc: '',
-        directors: '[""]',
-        actors: '[""]',
-        plotPics: '[""]',
-        Pics: [],
+        plotPics: [],
         movieUrl: '',
         coverUrl: '',
         posterUrl: ''
@@ -139,17 +137,45 @@ export default {
     handlePreview(file) {
       console.log(file)
     },
-    movieSuccess(res, file) {
-      this.form.movieUrl = URL.createObjectURL(file.raw)
+    movieSuccess(req, file) {
+      if (req.code === 0) {
+        this.form.movieUrl = req.path
+        this.$message({ message: req.message, type: 'success' })
+      } else {
+        this.$message.error(req.message)
+      }
     },
     coverSuccess(req, file) {
-      this.form.coverUrl = URL.createObjectURL(file.raw)
+      if (req.code === 0) {
+        this.form.coverUrl = req.path
+        this.$message({ message: req.message, type: 'success' })
+      } else {
+        this.$message.error(req.message)
+      }
     },
     posterSuccess(req, file) {
-      this.form.posterUrl = URL.createObjectURL(file.raw)
+      if (req.code === 0) {
+        this.form.posterUrl = req.path
+        this.$message({ message: req.message, type: 'success' })
+      } else {
+        this.$message.error(req.message)
+      }
+    },
+    plotPicsSuccess(req, file) {
+      if (req.code === 0) {
+        this.form.plotPics.psuh(req.path)
+        this.$message({ message: req.message, type: 'success' })
+      } else {
+        this.$message.error(req.message)
+      }
     },
     plotPicsRemove(url) {
-      console.log(url)
+      // if (req.code === 0) {
+      //   this.form.plotPics.psuh(req.path)
+      //   this.$message({ message: req.message, type: 'success' })
+      // } else {
+      //   this.$message.error(req.message)
+      // }
     }
   }
 }
