@@ -1,15 +1,16 @@
 <template>
   <div class="set_movie">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="影片ID">
-        <el-input v-model="form.id" />
+      <el-form-item label="文件存放路径">
+        <el-input v-model="form.path" placeholder="请先输入文件路径" />
       </el-form-item>
       <el-row :gutter="20" class="upload_box">
         <el-col :span="8">
           <el-form-item label="影片">
             <el-upload
               class="upload-poster avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="this.basehost+'/admin/movie/putMovie'"
+              :data= "{'path':form.path}"
               :on-preview="handlePreview"
               :on-success="movieSuccess"
               :show-file-list="false"
@@ -24,7 +25,8 @@
           <el-form-item label="影片封面:">
             <el-upload
               class="upload-poster avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="this.basehost+'/admin/movie/putMovie'"
+              :data= "{'path':form.path}"
               :on-preview="handlePreview"
               :on-success="coverSuccess"
               :show-file-list="false"
@@ -36,10 +38,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="影片剧照">
+          <el-form-item label="影片海报">
             <el-upload
               class="upload-poster avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="this.basehost+'/admin/movie/putMovie'"
+              :data= "{'path':form.path}"
               :on-preview="handlePreview"
               :on-success="posterSuccess"
               :show-file-list="false"
@@ -47,6 +50,20 @@
             >
               <img v-if="form.posterUrl" :src="form.posterUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon" />
+            </el-upload>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" class="upload_box">
+        <el-col :span="24">
+          <el-form-item label="影片剧照">
+            <el-upload
+              :action="this.basehost+'/admin/movie/putMovie'"
+              :data= "{'path':form.path}"
+              list-type="picture-card"
+              :on-remove="plotPicsRemove"
+            >
+              <i class="el-icon-plus" />
             </el-upload>
           </el-form-item>
         </el-col>
@@ -60,8 +77,8 @@
       <el-form-item label="prisedCounts">
         <el-input v-model="form.prisedCounts" />
       </el-form-item>
-      <el-form-item label="basicInfo">
-        <el-input v-model="form.prisedCounts" />
+      <el-form-item label="标签">
+        <el-input v-model="form.basicInfo" />
       </el-form-item>
       <el-form-item label="原名">
         <el-input v-model="form.originalName" />
@@ -73,7 +90,12 @@
         <el-input v-model="form.totalTime" />
       </el-form-item>
       <el-form-item label="影片描述">
-        <el-input v-model="form.plotDesc" />
+        <el-input
+          v-model="form.plotDesc"
+          type="textarea"
+          :autosize="{ minRows: 5, maxRows: 8}"
+          placeholder="影片描述"
+        />
       </el-form-item>
     </el-form>
   </div>
@@ -85,6 +107,7 @@ export default {
     return {
       form: {
         id: '',
+        path: '',
         name: '',
         score: '',
         prisedCounts: '',
@@ -100,8 +123,7 @@ export default {
         movieUrl: '',
         coverUrl: '',
         posterUrl: ''
-      },
-      
+      }
     }
   },
   methods: {
@@ -125,6 +147,9 @@ export default {
     },
     posterSuccess(req, file) {
       this.form.posterUrl = URL.createObjectURL(file.raw)
+    },
+    plotPicsRemove(url) {
+      console.log(url)
     }
   }
 }

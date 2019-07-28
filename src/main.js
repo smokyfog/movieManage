@@ -32,6 +32,7 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
+Vue.prototype.basehost = "http://129.28.187.206:3001"
 
 new Vue({
   el: '#app',
