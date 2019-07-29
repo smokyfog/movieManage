@@ -62,7 +62,7 @@
               :data="{'path':form.path}"
               list-type="picture-card"
               :on-success="plotPicsSuccess"
-              :on-remove="plotPicsRemove"
+              :before-remove="plotPicsRemove"
             >
               <i class="el-icon-plus" />
             </el-upload>
@@ -98,11 +98,17 @@
           placeholder="影片描述"
         />
       </el-form-item>
+      <el-col :span="24">
+        <el-row :span="24" class="submit_box">
+          <el-button type="primary" @click="submitMovie">提交</el-button>
+        </el-row>
+      </el-col>
     </el-form>
   </div>
 </template>
 
 <script>
+import Api from '@/request/api/api'
 export default {
   data() {
     return {
@@ -163,19 +169,25 @@ export default {
     },
     plotPicsSuccess(req, file) {
       if (req.code === 0) {
-        this.form.plotPics.psuh(req.path)
+        this.form.plotPics.push({ name: file.name, 'url': req.path })
         this.$message({ message: req.message, type: 'success' })
       } else {
         this.$message.error(req.message)
       }
     },
-    plotPicsRemove(url) {
-      // if (req.code === 0) {
-      //   this.form.plotPics.psuh(req.path)
-      //   this.$message({ message: req.message, type: 'success' })
-      // } else {
-      //   this.$message.error(req.message)
-      // }
+    async plotPicsRemove(data) {
+      const url = data.response.path
+      const res = await Api.delPlotPics({ path: url })
+      if (res.code === 0) {
+        this.$message({ message: '删除成功', type: 'success' })
+        this._.pullAllBy(this.form.plotPics, [{ url: url }], 'url')
+      } else {
+        this.$message.error('删除失败！')
+        return false
+      }
+    },
+    submitMovie() {
+      
     }
   }
 }
@@ -215,6 +227,10 @@ export default {
       display: flex;
       align-items: center;
     }
+  }
+  .submit_box{
+    display: flex;
+    justify-content: center;
   }
 }
 

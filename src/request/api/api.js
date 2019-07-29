@@ -18,5 +18,12 @@ export default Api = {
       url: '/admin/movie/list',
       params: params
     })
+  },
+  delPlotPics(params) {
+    return request({
+      method: 'Post',
+      url: '/admin/movie/delPlotPics',
+      params: params
+    })
   }
 }

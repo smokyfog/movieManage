@@ -17,9 +17,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8'
 
 // 对外接口
 export function request({ method, url, params }) {
-  if (method === 'Get' || method === 'get') {
+  if (method === 'Get' || method === 'get' || method === 'GET') {
     return get(url, params)
-  } else if (method === 'Post' || method === 'post') {
+  } else if (method === 'Post' || method === 'post' || method === 'POST') {
     return post(url, params)
   }
 }
