@@ -177,7 +177,7 @@ export default {
         const users = []
         res.data.map(item => {
           users.push({
-            value: item.id,
+            value: item._id,
             label: item.nickname
           })
         })
