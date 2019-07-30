@@ -12,6 +12,7 @@ export default Api = {
       params: params
     })
   },
+  // 获取电影接口
   getMovieList(params) {
     return request({
       method: 'Get',
@@ -19,10 +20,27 @@ export default Api = {
       params: params
     })
   },
+  // 删除图片
   delPlotPics(params) {
     return request({
       method: 'Post',
       url: '/admin/movie/delPlotPics',
+      params: params
+    })
+  },
+  // 创建电影
+  createMovie(params) {
+    return request({
+      method: 'Post',
+      url: '/admin/movie/createMovie',
+      params: params
+    })
+  },
+  // 获取官方用户
+  getOfficialUsers(params) {
+    return request({
+      method: 'GET',
+      url: '/admin/user/list',
       params: params
     })
   }

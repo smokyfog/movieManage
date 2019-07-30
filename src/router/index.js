@@ -67,6 +67,27 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/put',
+    component: Layout,
+    redirect: '/put/setmovie',
+    name: 'Put',
+    meta: { title: '上传', icon: 'example' },
+    children: [
+      {
+        path: 'setmovie',
+        name: 'SetMovie',
+        component: () => import('@/views/form/setMovie'),
+        meta: { title: '添加影片', icon: 'form' }
+      },
+      {
+        path: 'putsmallvideo',
+        name: 'PutSmallVideo',
+        component: () => import('@/views/form/putsmallvideo'),
+        meta: { title: '添加小视频', icon: 'form' }
+      }
+    ]
+  },
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -87,7 +108,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/form',
     component: Layout,
@@ -100,76 +120,6 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/setmovie',
-    component: Layout,
-    children: [
-      {
-        path: 'setmovie',
-        name: 'SetMovie',
-        component: () => import('@/views/form/setMovie'),
-        meta: { title: '添加影片', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
   {
     path: 'external-link',
     component: Layout,
