@@ -1,7 +1,7 @@
 <template>
   <div class="set_movie">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="指定所属用户">
+    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form-item label="指定所属用户" prop="region">
         <el-select v-model="form.userid" placeholder="请选择">
           <el-option
             v-for="item in users"
@@ -11,12 +11,12 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="文件存放路径">
+      <el-form-item label="文件存放路径" prop="path">
         <el-input v-model="form.path" placeholder="请先输入文件路径" />
       </el-form-item>
       <el-row :gutter="20" class="upload_box">
         <el-col :span="8">
-          <el-form-item label="视频">
+          <el-form-item label="视频" prop="trailer">
             <el-upload
               class="upload-poster avatar-uploader"
               :action="basehost+'/admin/movie/putMovie'"
@@ -32,7 +32,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="视频封面:">
+          <el-form-item label="视频封面:" prop="cover">
             <el-upload
               class="upload-poster avatar-uploader"
               :action="basehost+'/admin/movie/putMovie'"
@@ -51,16 +51,16 @@
       <el-form-item label="点赞数">
         <el-input v-model="form.praiseCount" />
       </el-form-item>
-      <el-form-item label="视频名称">
+      <el-form-item label="视频名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="视频评分">
+      <el-form-item label="视频评分" prop="score">
         <el-input v-model="form.score" />
       </el-form-item>
-      <el-form-item label="标签">
+      <el-form-item label="标签" prop="basicInfo">
         <el-input v-model="form.basicInfo" />
       </el-form-item>
-      <el-form-item label="影片描述">
+      <el-form-item label="影片描述" prop="plotDesc">
         <el-input
           v-model="form.plotDesc"
           type="textarea"
@@ -84,9 +84,9 @@ export default {
     return {
       users: [{}],
       form: {
-        path: '',
+        path: '官方作品',
         name: '',
-        score: '',
+        score: 0,
         basicInfo: '2018 / 美国 / 科幻 / 超级英雄',
         plotDesc: '',
         trailer: '',
@@ -94,6 +94,35 @@ export default {
         userid: '',
         praiseCount: 0,
         type: 99
+      },
+      rules: {
+        path: [
+          { required: true, message: '请输入存储', trigger: 'blur' }
+        ],
+        name: [
+          { required: true, message: '请输入视频名称', trigger: 'blur' }
+        ],
+        score: [
+          { type: 'number', message: '请选择评分', trigger: 'blur' }
+        ],
+        basicInfo: [
+          { required: true, message: '请输入视频信息', trigger: 'blur' }
+        ],
+        plotDesc: [
+          { required: true, message: '请输入视频描述', trigger: 'blur' }
+        ],
+        trailer: [
+          { required: true, message: '请上传视频', trigger: 'blur' }
+        ],
+        cover: [
+          { required: true, message: '请上传封面', trigger: 'blur' }
+        ],
+        userid: [
+          { required: true, message: '请选择所属用户', trigger: 'change' }
+        ],
+        praiseCount: [
+          { type: 'number', message: '请输入点赞数', trigger: 'blur' }
+        ],
       }
     }
   },
@@ -159,8 +188,15 @@ export default {
     },
     // 提交
     async submitMovie() {
-      const res = await Api.createMovie({ ...this.form })
-      console.log(res)
+      this.$refs["form"].validate(async (valid) => {
+        if (valid) {
+          const res = await Api.createMovie({ ...this.form })
+          console.log(res)
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      })
     }
   }
 }

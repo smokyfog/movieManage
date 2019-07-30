@@ -32,7 +32,7 @@ export default Api = {
   createMovie(params) {
     return request({
       method: 'Post',
-      url: '/admin/movie/createMovie',
+      url: '/admin/smallvideo/add',
       params: params
     })
   },
