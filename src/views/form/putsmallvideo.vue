@@ -54,7 +54,7 @@
       <el-form-item label="视频名称" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="视频评分" prop="score">
+      <el-form-item label="视频评分">
         <el-input v-model="form.score" />
       </el-form-item>
       <el-form-item label="标签" prop="basicInfo">
@@ -80,6 +80,7 @@
 <script>
 import Api from '@/request/api/api'
 export default {
+  inject: ['reload'],
   data() {
     return {
       users: [{}],
@@ -102,9 +103,6 @@ export default {
         name: [
           { required: true, message: '请输入视频名称', trigger: 'blur' }
         ],
-        score: [
-          { type: 'number', message: '请选择评分', trigger: 'blur' }
-        ],
         basicInfo: [
           { required: true, message: '请输入视频信息', trigger: 'blur' }
         ],
@@ -122,7 +120,7 @@ export default {
         ],
         praiseCount: [
           { type: 'number', message: '请输入点赞数', trigger: 'blur' }
-        ],
+        ]
       }
     }
   },
@@ -188,13 +186,20 @@ export default {
     },
     // 提交
     async submitMovie() {
-      this.$refs["form"].validate(async (valid) => {
+      const that = this
+      this.$refs['form'].validate(async(valid) => {
         if (valid) {
           const res = await Api.createMovie({ ...this.form })
           console.log(res)
+          if (res.code === 0) {
+            this.$message({ message: '上传成功', type: 'success' })
+            that.reload()
+          } else {
+            this.$message.error(res.message)
+          }
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
       })
     }
